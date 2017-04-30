@@ -1,9 +1,8 @@
 {
-  "name": "reveal.js",
-  "version": "3.5.0",
-  "description": "The HTML Presentation Framework",
-  "homepage": "http://lab.hakim.se/reveal-js",
-  "subdomain": "revealjs",
+  "name": "Learn CMake",
+  "version": "1.0.0",
+  "description": "Slides for teaching CMake",
+  "homepage": "https://github.com/DavidZemon/LearnCMake/wiki",
   "main": "js/reveal.js",
   "scripts": {
     "test": "grunt test",
@@ -11,13 +10,13 @@
     "build": "grunt"
   },
   "author": {
-    "name": "Hakim El Hattab",
-    "email": "hakim.elhattab@gmail.com",
-    "web": "http://hakim.se"
+    "name": "David Zemon",
+    "email": "david@zemon.name",
+    "web": "https://david.zemon.name"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/hakimel/reveal.js.git"
+    "url": "https://github.com/DavidZemon/LearnCMake_Slides"
   },
   "engines": {
     "node": ">=4.0.0"
