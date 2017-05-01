@@ -24,8 +24,286 @@
   <body>
     <div class="reveal">
       <div class="slides">
-        <section>Slide 1</section>
-        <section>Slide 2</section>
+        <!-- Chapter 0: Introduction -->
+        <section>
+          <!-- Title -->
+          <section data-markdown><textarea data-template>
+            Learn CMake
+            ===========
+
+            This gunna learn you some CMake
+
+            Created by [David Zemon](https://david.zemon.name/)
+          </textarea></section>
+
+          <!-- What is CMake? -->
+          <section data-markdown><textarea data-template>
+            What is CMake?
+            --------------
+
+            * Makefile generator
+              * Makefile scripts compile code incrementally
+              * Define relational dependencies
+              * Low-level, granular, unstructured
+            * Unit test runner
+            * Software packaging orchestrator
+          </textarea></section>
+
+          <!-- Why CMake -->
+          <section data-markdown><textarea data-template>
+            Why CMake
+            ---------
+
+            1. Cross-platform
+            1. High-level
+            1. Support for more than just compiling
+               * Unit testing
+               * Packaging
+               * IDE integration
+          </textarea></section>
+
+          <!-- Autotools -->
+          <section data-markdown><textarea data-template>
+            Shortcomings of Autotools
+            -------------------------
+
+            * Not build with Windows/Mac support in mind
+            * Configuration language is cryptic
+            * Flexibility overload &rarr; Minimal consistency &rarr; No IDE integration
+            * Few artifact packaging options
+          </textarea></section>
+
+          <!-- SCons -->
+          <section data-markdown><textarea data-template>
+            Shortcomings of SCons
+            ---------------------
+
+            * Potential speed issues
+            * Popularity &asymp; Community support and SCons is not as popular
+          </textarea></section>
+
+          <!-- Gradle -->
+          <section data-markdown><textarea data-template>
+            Gradle
+            ------
+
+            * Up and coming C++ build system
+            * Aiming straight for Maven/NPM-like dependency resolution
+            * Holy grail when complete
+            * Worse than CMake in the meantime :(
+          </textarea></section>
+        </section>
+
+        <!-- Chapter 1: "Hello, World!" -->
+        <section>
+          <!-- Simple executable -->
+          <section data-markdown><textarea data-template>
+            Chapter 1. "Hello, World!"
+            --------------------------
+
+            ```cmake
+            cmake_minimum_required(VERSION 2.8)
+
+            project(LearnCMake)
+
+            add_executable(HelloWorld main.cpp)
+            ```
+
+            ```
+            $ mkdir bin
+            $ cd bin
+            $ cmake ..
+            $ make
+            $ ./HelloWorld
+            ```
+
+            Produces an executable named either `HelloWorld` on *nix or `HelloWorld.exe` on Windows.
+          </textarea></section>
+
+          <!-- Add a library -->
+          <section data-markdown><textarea data-template>
+            Useless Library
+            ---------------
+
+            ```cmake
+            cmake_minimum_required(VERSION 2.8)
+
+            project(LearnCMake)
+
+            add_library(useless useless.cpp)
+            ```
+
+            * Produces a library named `libuseless.a` on *nix or `useless.lib` on Windows.
+            * Can select static, shared, object, or module in the `add_library()` invocation
+          </textarea></section>
+
+          <!-- Linking a library.-->
+          <section data-markdown><textarea data-template>
+            Say "Hello" to a Useless Library
+            --------------------------------
+
+            ```cmake
+            cmake_minimum_required(VERSION 2.8)
+
+            project(LearnCMake)
+
+            add_library(useless useless/useless.cpp)
+            add_executable(HelloWorld hello/main.cpp)
+            target_link_libraries(HelloWorld useless)
+            ```
+
+            Use of target names rather than filenames keeps our CMake scripts platform-independent
+          </textarea></section>
+
+          <!-- Set some flags.-->
+          <section data-markdown><textarea data-template>
+            Set Some Compiler Options
+            -------------------------
+
+            ```cmake
+            cmake_minimum_required(VERSION 2.8)
+
+            project(LearnCMake)
+
+            include_directories("${PROJECT_SOURCE_DIR}/include")
+            set(CMAKE_CXX_FLAGS -Wall)
+
+            add_library(useless useless/useless.cpp)
+            add_executable(HelloWorld hello/main.cpp)
+            target_link_libraries(HelloWorld useless)
+            ```
+
+            * Quotes are an important part of platform-independence (spaces are far more prevelant on Windows)
+            * The `CMAKE_CXX_FLAGS` variable sets compiler flags globally for all C++ files
+          </textarea></section>
+
+          <!-- CMake `option`s -->
+          <section data-markdown><textarea data-template>
+            User-Friendly Options
+            ---------------------
+
+            ```cmake
+            option(WARN_ALL "Throw warnings when you write dumb code" ON)
+            if (WARN_ALL)
+              set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+            endif ()
+            ```
+
+            * The `WARN_ALL` option is now explicitly presented to the user during an invocation of `ccmake`
+              (or the CMake GUI on Windows).
+            * CMake `option()` function does not provide functionality, only usability
+          </textarea></section>
+
+          <!-- CMAKE_BUILD_TYPE -->
+          <section data-markdown><textarea data-template>
+            Selecting Release/Debug Builds
+            ------------------------------
+
+            *`CMAKE_BUILD_TYPE`* has five default options:
+            * Release: `-O3 -DNDEBUG`
+            * Debug: `-g`
+            * RelWithDebInfo: `-O2 -g -DNDEBUG`
+            * MinSizeRel: `-Os -DNDEBUG`
+            * Fifth option is unset (default) and will not set any flags by default
+          </textarea></section>
+
+          <!-- CMAKE_BUILD_TYPE continued... -->
+          <section data-markdown><textarea data-template>
+            Utilizing `CMAKE_BUILD_TYPE`
+            ----------------------------
+
+            ```cmake
+            # Enable super extra warnings in debug mode
+            set(CMAKE_CXX_DEBUG_FLAGS "${CMAKE_CXX_DEBUG_FLAGS} -Wextra")
+            ```
+
+            * Note that the build type is capitalized in this use case
+            * Set flags on a per-build-configuration basis
+            * Build configuration types will come up again later in other parts of CMake as well
+          </textarea></section>
+
+          <!-- Inheriting from dependencies -->
+          <section data-markdown><textarea data-template>
+            Set Flags on Targets, Not Folders
+            ---------------------------------
+
+            ```cmake
+            cmake_minimum_required(VERSION 2.8)
+
+            project(LearnCMake)
+
+            add_library(useless useless/useless.cpp)
+            target_include_directories(useless PUBLIC "${PROJECT_SOURCE_DIR}/include")
+            target_include_directories(useless PRIVATE "${PROJECT_SOURCE_DIR}/useless")
+
+            add_executable(HelloWorld hello/main.cpp)
+            target_link_libraries(HelloWorld useless)
+            ```
+
+            * `PUBLIC` means that `HelloWorld`'s source files will inherit the header search path
+            * `PRIVATE` means that `HelloWorld`'s source files will not inherit the header search path
+            * `INTERFACE` means that _only_ `HelloWorld` would inherit it, and that `useless` would _not_
+          </textarea></section>
+
+          <!-- More inheritance -->
+          <section data-markdown><textarea data-template>
+            Other Target-Centric Functions
+            ------------------------------
+
+            Lots more functions aimed at setting properties on targets:
+
+            * `target_link_libraries`
+            * `target_compile_options`
+            * `target_compile_definitions`
+          </textarea></section>
+
+          <!-- Transitive dependencies -->
+          <section data-markdown><textarea data-template>
+            Transitive Dependencies
+            -----------------------
+
+            ```
+            add_library(useful  useful/useful.cpp)
+
+            add_library(useless useless/useless.cpp)
+            target_link_libraries(useless useful)
+
+            add_executable(HelloWorld hello/main.cpp)
+            target_link_libaries(HelloWorld useless)
+            ```
+
+            `HelloWorld` &rarr; `useless` &rarr; `useful`
+          </textarea></section>
+
+          <!-- Graphviz -->
+          <section data-markdown><textarea data-template>
+            BONUS! Graphviz Output
+            ----------------------
+
+            ```txt
+            $ mkdir bin
+            $ cd bin
+            $ cmake --graphviz=graphs/learn ..
+            $ ls graphs
+            $ cat graphs/learn.HelloWorld
+            $ dot -T png graphs/learn.HelloWorld -o HelloWorld.png
+            ```
+
+            * Adding the `--graphviz` option creates "dot" files for every CMake target
+            * The "dot" language is very simple to read _and_ write
+            * Converting from "dot" files to images is simple with the "dot" command line tool
+          </textarea></section>
+        </section>
+
+        <!-- Chapter 2: In-Depth Syntax -->
+        <section>
+          <section data-markdown><textarea data-template>
+            Chapter 2. In-Depth Syntax
+            --------------------------
+
+            Coming soon!
+          </textarea></section>
+        </section>
       </div>
     </div>
 
@@ -37,14 +315,25 @@
       // - https://github.com/hakimel/reveal.js#configuration
       // - https://github.com/hakimel/reveal.js#dependencies
       Reveal.initialize({
+        width: "100%",
+        height: "100%",
         dependencies: [
-          {src: 'plugin/markdown/marked.js'},
-          {src: 'plugin/markdown/markdown.js'},
-          {src: 'plugin/notes/notes.js', async: true},
           {
-            src: 'plugin/highlight/highlight.js', async: true, callback: function () {
-            hljs.initHighlightingOnLoad();
-          }
+            src: 'plugin/markdown/marked.js'
+          },
+          {
+            src: 'plugin/markdown/markdown.js'
+          },
+          {
+            src: 'plugin/notes/notes.js',
+            async: true
+          },
+          {
+            src: 'plugin/highlight/highlight.js',
+            async: true,
+            callback: function () {
+              hljs.initHighlightingOnLoad();
+            }
           }
         ]
       });
