@@ -28,10 +28,8 @@
         <section>
           <!-- Title -->
           <section data-markdown><textarea data-template>
-            Learn CMake
-            ===========
-
-            Created by [David Zemon](https://david.zemon.name/)
+            ![CMake logo](images/CMake-Logo-and-Text.png)
+            <!-- .element style="border: 0; background: None; box-shadow: None" -->
 
             * [Slide source code](https://github.com/DavidZemon/LearnCMake)
             * [Syllabus](https://github.com/DavidZemon/LearnCMake/wiki/Syllabus)
@@ -39,6 +37,8 @@
             * Lab Instructions (TODO)
             * [CMake Documentation](https://cmake.org/documentation/) (3.x)
             * [CMake Documentation for v2.8.12](https://cmake.org/cmake/help/v2.8.12/cmake.html)
+
+            Content by [David Zemon](https://david.zemon.name/), May 2017
           </textarea></section>
 
           <!-- What is CMake? -->
@@ -101,10 +101,19 @@
 
         <!-- Chapter 1: "Hello, World!" -->
         <section>
+          <!-- Intro -->
+          <section data-markdown><textarea data-template>
+            Chapter 1
+            ---------
+
+            ![Silly hello world image](images/Hello-World.jpg)
+            <!-- .element style="border: 0; background: None; box-shadow: None" -->
+          </textarea></section>
+
           <!-- Simple executable -->
           <section data-markdown><textarea data-template>
-            Chapter 1. "Hello, World!"
-            --------------------------
+            Create an Executable
+            --------------------
 
             ```cmake
             cmake_minimum_required(VERSION 2.8)
@@ -322,6 +331,8 @@
       Reveal.initialize({
         width: 1680,
         height: 1050,
+        previewLinks: true,
+        history: true,
         dependencies: [
           {
             src: 'plugin/markdown/marked.js'
