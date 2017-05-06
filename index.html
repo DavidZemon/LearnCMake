@@ -445,6 +445,25 @@
 
             See full list of boolean operators on CMake's `if` documentation
           </textarea></section>
+
+          <!-- Generator Expressions -->
+          <section data-markdown><textarea data-template>
+            Generator Expressions
+            ---------------------
+
+            <pre><code class="line-numbers CMake" data-trim>
+              add_executable(HelloWorld main.cpp)
+
+              add_custom_target(create_archive
+                COMMAND ${CMAKE_COMMAND} -E tar "cfz" "app.tar.gz" $&amp;lt;TARGET_FILE:HelloWorld>
+                DEPENDS HelloWorld)
+            </code></pre>
+
+            * Evaluated during build system generation
+              * Can not be used during CMake parsing time, such as in an invocation of `message(...)`
+            * Provides access to information that cannot be known to the author of the CMake scripts
+            * Supports a declaritive approach where otherwise an if/else check would be required
+          </textarea></section>
         </section>
       </div>
     </div>
