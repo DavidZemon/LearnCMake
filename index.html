@@ -464,6 +464,114 @@
             * Provides access to information that cannot be known to the author of the CMake scripts
             * Supports a declaritive approach where otherwise an if/else check would be required
           </textarea></section>
+
+          <!-- Macros -->
+          <section data-markdown><textarea data-template>
+            Macros
+            ------
+
+            <pre><code data-trim class="line-numbers CMake">
+              macro(set_dummy name value)
+                set("${name}" "${value}")
+              endmacro()
+
+              set_dummy(FOO BAR)
+              message("FOO=${FOO}") # Output = "FOO=BAR"
+
+              set_dummy(BAZ;FOOBAR)
+              message("BAZ=${BAZ}") # Output = "BAZ=FOOBAR"
+            </code></pre>
+
+            * Much like the C/C++ preprocessor, macros are essentially "copied/pasted" where they are invoked
+            * No variable scope
+            * Parameters are passed in as space-separated variables or as a list
+          </textarea></section>
+
+          <!-- Functions -->
+          <section data-markdown><textarea data-template>
+            Functions
+            ---------
+
+            <pre><code data-trim class="line-numbers CMake">
+              function(set_dummy name value)
+                set("${name}" "${value}")
+                message("${name}=${${name}}")
+              endfunction()
+              set_dummy(FOO BAR)    # Output = "FOO=BAR"
+              message("FOO=${FOO}") # Output = "FOO="
+            </code></pre>
+
+            * Like a real "function", variables here have there own scope
+            * No concept of "return" value
+
+            <pre><code data-trim class="line-numbers CMake">
+              function(set_dummy name value)
+                set("${name}" "${value}" PARENT_SCOPE)
+                message("${name}=${${name}}")
+              endfunction()
+              set_dummy(FOO BAR)    # Output = "FOO="
+              message("FOO=${FOO}") # Output = "FOO=BAR"
+            </code></pre>
+          </textarea></section>
+
+          <!-- CMakeParseArguments -->
+          <section data-markdown><textarea data-template>
+            Functions: `cmake_parse_arguments`
+            ----------------------------------
+
+            `cmake_parse_arguments(&lt;prefix> &lt;options> &lt;one_value_keywords> &lt;multi_value_keywords> args...)`
+
+            * Adds psuedo-support for named parameters
+            * `${ARGN}` in a function or macro provides access to any extra arguments in an invocation
+
+            <pre><code data-trim class="line-numbers CMake">
+              function (do_foo)
+                cmake_parse_arguments(DO_FOO "FLAG1;FLAG2" "OPT1;OPT2" "M_OPT1" ${ARGN})
+
+                if (DO_FOO_FLAG1)
+                  # Do stuff if `FLAG1` was passed into the `do_foo(...)` invocation
+                endif ()
+
+                # ... More code...
+              endfunction ()
+            </code></pre>
+          </textarea></section>
+        </section>
+
+        <!-- Chapter 3: Installing Software -->
+        <section>
+          <!-- Intro -->
+          <section data-markdown><textarea data-template>
+            Chapter 3: Installing Software
+            ------------------------------
+
+            ![MS DOS install!](images/MS-DOS-7.1-install-56.png)
+            <!-- .element style="border: 0; background: None; box-shadow: None; width: 80%" -->
+          </textarea></section>
+
+          <!-- Install Function -->
+          <section data-markdown><textarea data-template>
+            `install(...)` Function
+            -----------------------
+
+            * Highly versatile
+            * Different forms for installing:
+              * Executable CMake targets
+              * Library CMake targets
+              * Executables that are not CMake targets
+              * Miscellaneous files (such as headers)
+              * Whole directories
+            * Add an executable CMake script to run during installation
+            * Support for multiple installation "components" which can become one or many installation packages
+          </textarea></section>
+
+          <!-- Install Executable Target -->
+          <section data-markdown><textarea data-template>
+            Install Targets
+            ---------------
+
+
+          </textarea></section>
         </section>
       </div>
     </div>
