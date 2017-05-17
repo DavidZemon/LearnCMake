@@ -538,21 +538,54 @@
           </textarea></section>
         </section>
 
-        <!-- Chapter 3: Installing Software -->
+        <!-- Chapter 3: Importing Dependencies -->
+        <section>
+          <!-- Introduction -->
+          <section data-markdown><textarea data-template>
+            Chapter 3
+            ---------
+
+            ![Dependency diagram](images/sprox_dot.png)
+            <!-- .element style="border: 0; background: None; box-shadow: None; width: 80%"-->
+
+            ### Importing Dependencies
+          </textarea></section>
+
+          <!-- find_package(...) -->
+          <section data-markdown><textarea data-template>
+            `find_package(&lt;package> [version] [REQUIRED])`
+            -------------------------------------------------
+
+            * Packages are dependencies, such as Qt, Boost, or even a program like Doxygen
+            * Supports basic version comparisons to ensure you have a version greater than or equal to the requested
+            * Can define "components" to be included, such as Boost's many different pieces
+            * Segregates filesystem inspection logic from build system logic
+            * Reduces code duplication and minimizes end-user bugs while increasing flexibility
+          </textarea></section>
+
+          <!-- find_package(...) continued... -->
+          <section data-markdown><textarea data-template>
+
+          </textarea></section>
+        </section>
+
+        <!-- Chapter 4: Installing Software -->
         <section>
           <!-- Intro -->
           <section data-markdown><textarea data-template>
-            Chapter 3: Installing Software
-            ------------------------------
+            Chapter 4
+            ---------
 
             ![MS DOS install!](images/MS-DOS-7.1-install-56.png)
             <!-- .element style="border: 0; background: None; box-shadow: None; width: 80%" -->
+
+            ### Installing Software
           </textarea></section>
 
-          <!-- Install Function -->
+          <!-- Install Function Overview -->
           <section data-markdown><textarea data-template>
-            `install(...)` Function
-            -----------------------
+            `install(...)` Function Overview
+            --------------------------------
 
             * Highly versatile
             * Different forms for installing:
@@ -565,12 +598,55 @@
             * Support for multiple installation "components" which can become one or many installation packages
           </textarea></section>
 
-          <!-- Install Executable Target -->
+          <!-- Install: Common Arguments -->
+          <section>
+            <h2>Install: Common Arguments</h2>
+
+            <dl>
+              <dd><code>DESTINATION</code> (required)</dd>
+              <dt>Relative path where content should be installed</dt>
+
+              <dd><code>PERMISSIONS</code></dd>
+              <dt>Filesystem permissions of the installed content</dt>
+
+              <dd><code>CONFIGURATIONS</code></dd>
+              <dt>Support for filtering by CMake configuration type (as in, <code>CMAKE_BUILD_TYPE</code>)</dt>
+
+              <dd><code>COMPONENT</code></dd>
+              <dt>Specifies the component (more in Chapter 4)</dt>
+
+              <dd><code>OPTIONAL</code></dd>
+              <dt>Should an error be thrown if no file exists to be installed</dt>
+            </dl>
+          </section>
+
+          <!-- Install: Examples -->
           <section data-markdown><textarea data-template>
-            Install Targets
-            ---------------
+            Install: Examples
+            -----------------
 
+            <pre><code data-trim class="line-numbers CMake">
+              # Install the "HelloWorld" target to the `bin` directory
+              install(TARGETS HelloWorld DESTINATION bin)
 
+              # Install (almost) the entire contents of a directory...
+              install(DIRECTORY "${PROJECT_SOURCE_DIR}/include/"
+                DESTINATION include
+                FILES_MATCHING PATTERN "*.h")
+
+              # Install some specific files. DON'T COPY THIS EXAMPLE! See install(PROGRAMS ...)
+              install(FILES
+                  "${PROJECT_SOURCE_DIR}/scripts/doFoo.sh"
+                  "${PROJECT_SOURCE_DIR}/scripts/doBar.py"
+                DESTINATION bin
+                PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE)
+            </code></pre>
+          </textarea></section>
+
+          <!-- Exported CMake Scripts-->
+          <section data-markdown><textarea data-template>
+            Exported CMake Scripts
+            ----------------------
           </textarea></section>
         </section>
       </div>
