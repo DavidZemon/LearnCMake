@@ -551,21 +551,57 @@
             ### Importing Dependencies
           </textarea></section>
 
+          <!-- find_library(...) -->
+          <section data-markdown><textarea data-template>
+            `find_library(&lt;VAR> name1 [path1 ...])`
+            ------------------------------------------
+
+            * Search the filesystem for a library with the given name
+            * Once found, the search will not be performed again (set in the cache)
+            * Lots of different paths will be searched in a specific order
+            * Defaults can be disabled individually or all at once
+
+            <pre><code data-trim class="line-numbers CMake">
+              find_library(USELESS_LIB useless "it/might/be/installed/here")
+              add_executable(Hello hello.cpp)
+              target_link_libraries(Hello "${USELESS_LIB}")
+            </code></pre>
+          </textarea></section>
+
           <!-- find_package(...) -->
           <section data-markdown><textarea data-template>
             `find_package(&lt;package> [version] [REQUIRED])`
             -------------------------------------------------
 
-            * Packages are dependencies, such as Qt, Boost, or even a program like Doxygen
-            * Supports basic version comparisons to ensure you have a version greater than or equal to the requested
-            * Can define "components" to be included, such as Boost's many different pieces
+            * Packages are dependencies, such as Qt or Boost
+            * Supports basic version comparisons
+            * Can define "components" within the package
             * Segregates filesystem inspection logic from build system logic
             * Reduces code duplication and minimizes end-user bugs while increasing flexibility
           </textarea></section>
 
           <!-- find_package(...) continued... -->
           <section data-markdown><textarea data-template>
+            `find_package(...)` Examples
+            ----------------------------
 
+            * Some implementations provide simple variables defining the header include path and library paths
+            <pre><code data-trim class="line-numbers CMake">
+              find_package(ZLIB REQUIRED)
+
+              add_executable(myProgram file1.cpp file2.cpp)
+              target_include_directories(myProgram PUBLIC "${ZLIB_INCLUDE_DIRS}")
+              target_link_libraries(myProgram "${ZLIB_LIBRARIES}")
+            </code></pre>
+
+            * While others rely on more sophisticated approaches, using targets and inherited properties
+            <pre><code data-trim class="line-numbers CMake">
+              find_package(Qt4 REQUIRED)
+
+              # No target_include_directories(...) needed!
+              add_executable(myProgram file1.cpp file2.cpp)
+              target_link_libraries(myProgram Qt4::QtGui)
+            </code></pre>
           </textarea></section>
         </section>
 
