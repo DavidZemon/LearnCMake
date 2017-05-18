@@ -562,8 +562,27 @@
             * Defaults can be disabled individually or all at once
 
             <pre><code data-trim class="line-numbers CMake">
-              find_library(USELESS_LIB useless "it/might/be/installed/here")
+              find_library(USELESS_LIB useless "it/might/be/installed/here/lib64")
               add_executable(Hello hello.cpp)
+              target_link_libraries(Hello "${USELESS_LIB}")
+            </code></pre>
+          </textarea></section>
+
+          <!-- find_path(...) -->
+          <section data-markdown><textarea data-template>
+            `find_path(&lt;VAR> name1 [path1 ...])`
+            ------------------------------------------
+
+            * Just like `find_library(...)`, but for directories
+            * Frequently used to find header include paths or library installation paths
+
+            <pre><code data-trim class="line-numbers CMake">
+              set(USELESS_ROOT "it/might/be/installed/here")
+              find_library(USELESS_LIB useless "${USELESS_ROOT}/lib64")
+              find_path(USELESS_INCLUDE_DIR useless/useless.h "${USELESS_ROOT}/include")
+
+              add_executable(Hello hello.cpp)
+              target_include_directories(Hello PUBLIC "${USELESS_INCLUDE_DIR}")
               target_link_libraries(Hello "${USELESS_LIB}")
             </code></pre>
           </textarea></section>
