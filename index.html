@@ -202,6 +202,7 @@
 
             * Quotes are an important part of platform-independence (spaces are far more prevelant on Windows)
             * The `CMAKE_CXX_FLAGS` variable sets compiler flags globally for all C++ files
+            * For GNU Make, use `make VERBOSE=1` to view commands and arguments as they are executed
           </textarea></section>
 
           <!-- CMake `option`s -->
@@ -593,6 +594,7 @@
             -------------------------------------------------
 
             * Packages are dependencies, such as Qt or Boost
+              * Collection of variables or targets associated with a dependency
             * Supports basic version comparisons
             * Can define "components" within the package
             * Segregates filesystem inspection logic from build system logic
@@ -621,6 +623,18 @@
               add_executable(myProgram file1.cpp file2.cpp)
               target_link_libraries(myProgram Qt4::QtGui)
             </code></pre>
+          </textarea></section>
+
+          <!-- find_package(...) Search Precedence -->
+          <section data-markdown><textarea data-template>
+            `find_package(...)` Search Precedence
+            -------------------------------------
+
+            * Invocations of `find_package(...)` search for CMake script named `Find&lt;package>.cmake` in
+              * Default installation paths (such as `/usr/share/cmake/Modules`)
+              * Paths provided via `CMAKE_MODULE_PATH`
+            * If no `Find&lt;package>.cmake` script found, search for `&lt;package>Config.cmake` script in
+              path specified by `&lt;package>_DIR` variable.
           </textarea></section>
         </section>
 
