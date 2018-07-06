@@ -625,9 +625,9 @@
             * Frequently used to find header include paths or library installation paths
 
             <pre><code data-trim class="line-numbers CMake">
-              set(USELESS_ROOT "it/might/be/installed/here")
-              find_library(USELESS_LIB useless "${USELESS_ROOT}/lib64")
+              find_path(USELESS_ROOT "include/useless/useless.h" "it/might/be/installed/here")
               find_path(USELESS_INCLUDE_DIR useless/useless.h "${USELESS_ROOT}/include")
+              find_library(USELESS_LIB useless "${USELESS_ROOT}/lib64")
 
               add_executable(Hello hello.cpp)
               target_include_directories(Hello PUBLIC "${USELESS_INCLUDE_DIR}")
